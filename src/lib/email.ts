@@ -23,7 +23,7 @@ export async function sendInvitationEmail(name: string, email: string) {
           
           <!-- Graduation Invitation Image -->
           <div style="text-align: center; margin-bottom: 30px;">
-            <img src="cid:graduation-invitation" alt="Graduation Invitation" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" />
+            <img src="${process.env.NEXT_PUBLIC_URL}/assets/graduation-invitation.png" alt="Graduation Invitation" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" />
           </div>
           
           <div style="background: #f8fafc; padding: 25px; border-radius: 15px; margin-bottom: 25px; border-left: 4px solid #2563eb;">
@@ -67,13 +67,6 @@ export async function sendInvitationEmail(name: string, email: string) {
           </div>
         </div>
       `,
-      attachments: [
-        {
-          filename: 'graduation-invitation.png',
-          content: imageBuffer,
-          cid: 'graduation-invitation',
-        },
-      ],
     });
 
     if (error) {
