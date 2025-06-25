@@ -1,14 +1,12 @@
 "use client";
-import React from "react";
 import {
   motion,
-  useScroll,
-  useTransform,
-  useSpring,
   MotionValue,
+  useScroll,
+  useSpring,
+  useTransform,
 } from "motion/react";
-
-
+import React from "react";
 
 export const HeroParallax = ({
   products,
@@ -57,7 +55,7 @@ export const HeroParallax = ({
   return (
     <div
       ref={ref}
-      className="h-[300vh] py-40 overflow-hidden  antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
+      className="h-[300vh] py-40 overflow-hidden antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
     >
       <Header />
       <motion.div
@@ -105,10 +103,12 @@ export const Header = () => {
   return (
     <div className="max-w-7xl relative mx-auto py-20 md:py-40 px-4 w-full  left-0 top-0">
       <h1 className="text-2xl md:text-7xl font-bold dark:text-white">
-        Những bức ảnh<br /> Tốt nghiệp tôi và bạn
+        Những bức ảnh
+        <br /> Tốt nghiệp tôi và bạn
       </h1>
       <p className="max-w-2xl text-base md:text-xl mt-8 dark:text-neutral-200">
-        Đến lễ tốt nghiệp rồi chụp với tôi rồi gửi cho tôi để tôi đăng lên đây nhé
+        Đến lễ tốt nghiệp rồi chụp với tôi rồi gửi cho tôi để tôi đăng lên đây
+        nhé
       </p>
     </div>
   );
@@ -136,10 +136,7 @@ export const ProductCard = ({
       key={product.title}
       className="group/product h-96 w-[30rem] relative shrink-0"
     >
-      <a
-        href={product.link}
-        className="block group-hover/product:shadow-2xl "
-      >
+      <a href={product.link} className="block group-hover/product:shadow-2xl ">
         <img
           src={product.thumbnail}
           height="600"
