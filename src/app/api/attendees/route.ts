@@ -2,11 +2,25 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { sendInvitationEmail } from '@/lib/email';
 
+// Retry helper function
+async function withRetry<T>(fn: () => Promise<T>, retries = 3): Promise<T> {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fn();
+    } catch (error) {
+      console.log(`Attempt ${i + 1} failed:`, error);
+      if (i === retries - 1) throw error;
+      // Wait before retry (exponential backoff)
+      await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+    }
+  }
+  throw new Error('Max retries exceeded');
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { name, email, message } = await req.json();
 
-    // Validate required fields
     if (!name || !email) {
       return NextResponse.json(
         { error: 'Họ tên và email là bắt buộc' },
@@ -23,7 +37,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { db } = await connectToDatabase();
+    // Connect to database with retry
+    const { db } = await withRetry(async () => {
+      return await connectToDatabase();
+    });
     
     // Check if email already exists
     const existingAttendee = await db.collection('attendees').findOne({ email });
@@ -64,6 +81,17 @@ export async function POST(req: NextRequest) {
 
   } catch (error) {
     console.error('API Error:', error);
+    
+    // More specific error messages
+    if (error instanceof Error) {
+      if (error.message.includes('MongoServerSelectionError') || error.message.includes('SSL')) {
+        return NextResponse.json(
+          { error: 'Lỗi kết nối cơ sở dữ liệu. Vui lòng thử lại sau.' },
+          { status: 503 }
+        );
+      }
+    }
+    
     return NextResponse.json(
       { error: 'Có lỗi xảy ra. Vui lòng thử lại.' },
       { status: 500 }
@@ -73,7 +101,10 @@ export async function POST(req: NextRequest) {
 
 export async function GET() {
   try {
-    const { db } = await connectToDatabase();
+    // Connect to database with retry
+    const { db } = await withRetry(async () => {
+      return await connectToDatabase();
+    });
     
     const attendees = await db.collection('attendees')
       .find({})
@@ -93,6 +124,17 @@ export async function GET() {
 
   } catch (error) {
     console.error('API Error:', error);
+    
+    // More specific error messages
+    if (error instanceof Error) {
+      if (error.message.includes('MongoServerSelectionError') || error.message.includes('SSL')) {
+        return NextResponse.json(
+          { error: 'Lỗi kết nối cơ sở dữ liệu. Vui lòng thử lại sau.' },
+          { status: 503 }
+        );
+      }
+    }
+    
     return NextResponse.json(
       { error: 'Có lỗi xảy ra khi lấy danh sách' },
       { status: 500 }
