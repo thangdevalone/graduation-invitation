@@ -1,16 +1,15 @@
-import { Resend } from 'resend';
-import fs from 'fs';
-import path from 'path';
+import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendInvitationEmail(name: string, email: string) {
   try {
-
     const { data, error } = await resend.emails.send({
-      from: process.env.FROM_EMAIL || 'Graduation Invitation <noreply@yourdomain.com>',
+      from:
+        process.env.FROM_EMAIL ||
+        "Graduation Invitation <noreply@yourdomain.com>",
       to: [email],
-      subject: '🎓 Lời mời tham dự lễ tốt nghiệp',
+      subject: "🎓 Lời mời tham dự lễ tốt nghiệp",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
           
@@ -19,7 +18,7 @@ export async function sendInvitationEmail(name: string, email: string) {
           </div>
           
           <div style="text-align: center; margin-bottom: 25px;">
-            <img src="${process.env.NEXT_PUBLIC_APP_URL}/assets/graduation-invitation.png" alt="Graduation Invitation" style="max-width: 100%; height: auto; border-radius: 8px;" />
+            <img src="${process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "")}/assets/graduation-invitation.png" alt="Graduation Invitation" style="max-width: 100%; height: auto; border-radius: 8px;" />
           </div>
           
           <div style="margin-bottom: 25px;">
@@ -59,13 +58,13 @@ export async function sendInvitationEmail(name: string, email: string) {
     });
 
     if (error) {
-      console.error('Error sending email:', error);
+      console.error("Error sending email:", error);
       return { success: false, error };
     }
 
     return { success: true, data };
   } catch (error) {
-    console.error('Failed to send email:', error);
+    console.error("Failed to send email:", error);
     return { success: false, error };
   }
-} 
+}
