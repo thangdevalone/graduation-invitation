@@ -28,6 +28,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Check if graduation date has passed (July 5, 2025)
+    const graduationDate = new Date('2025-07-05T23:59:59.999Z');
+    const currentDate = new Date();
+    
+    if (currentDate > graduationDate) {
+      return NextResponse.json(
+        { error: 'Thời gian đăng ký đã hết hạn. Lễ tốt nghiệp đã diễn ra vào ngày 5/7/2025.' },
+        { status: 410 }
+      );
+    }
+
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {

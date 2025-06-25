@@ -10,11 +10,13 @@ export function CustomeInput({
   onChange,
   onSubmit,
   value: externalValue,
+  disabled = false,
 }: {
   placeholder: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   value?: string;
+  disabled?: boolean;
 }) {
   const [internalValue, setInternalValue] = useState("");
   const value = externalValue !== undefined ? externalValue : internalValue;
@@ -23,9 +25,10 @@ export function CustomeInput({
     <form
       className={cn(
         "w-full relative max-w-xl mx-auto bg-white dark:bg-zinc-800 h-12 rounded-full overflow-hidden shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),_0px_1px_0px_0px_rgba(25,28,33,0.02),_0px_0px_0px_1px_rgba(25,28,33,0.08)] transition duration-200",
-        value && "bg-gray-50"
+        value && "bg-gray-50",
+        disabled && "opacity-50 cursor-not-allowed"
       )}
-      onSubmit={onSubmit}
+      onSubmit={disabled ? (e) => e.preventDefault() : onSubmit}
     >
       <Image
         src="/assets/RongTA.svg"
@@ -36,6 +39,7 @@ export function CustomeInput({
       />
       <input
         onChange={(e) => {
+          if (disabled) return;
           if (externalValue !== undefined) {
             onChange && onChange(e);
           } else {
@@ -45,14 +49,16 @@ export function CustomeInput({
         }}
         value={value}
         type="email"
+        disabled={disabled}
         className={cn(
-          "w-full relative text-sm sm:text-base z-50 border-none bg-white dark:text-white text-black h-full rounded-full focus:outline-none focus:ring-0 pl-4 sm:pl-13 pr-20"
+          "w-full relative text-sm sm:text-base z-50 border-none bg-white dark:text-white text-black h-full rounded-full focus:outline-none focus:ring-0 pl-12 sm:pl-13 pr-20",
+          disabled && "cursor-not-allowed"
         )}
         placeholder={placeholder}
       />
 
       <button
-        disabled={!value}
+        disabled={!value || disabled}
         type="submit"
         className="absolute cursor-pointer right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-8 rounded-full disabled:bg-gray-100 bg-black dark:bg-zinc-900 dark:disabled:bg-zinc-800 transition duration-200 flex items-center justify-center"
       >
