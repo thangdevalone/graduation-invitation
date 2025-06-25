@@ -51,7 +51,7 @@ export function CustomeInput({
         type="email"
         disabled={disabled}
         className={cn(
-          "w-full relative text-sm sm:text-base z-50 border-none bg-white dark:text-white text-black h-full rounded-full focus:outline-none focus:ring-0 pl-12 sm:pl-13 pr-20",
+          "w-full relative text-base z-50 border-none bg-white dark:text-white text-black h-full rounded-full focus:outline-none focus:ring-0 pl-12 sm:pl-13 pr-20",
           disabled && "cursor-not-allowed"
         )}
         placeholder={placeholder}
