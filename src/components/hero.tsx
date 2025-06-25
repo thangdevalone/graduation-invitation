@@ -12,12 +12,11 @@ export function Hero() {
     message: string;
   } | null>(null);
 
-  // Auto-hide notification after 2 seconds
   useEffect(() => {
     if (notification) {
       const timer = setTimeout(() => {
         setNotification(null);
-      }, 2000);
+      }, 5000);
 
       return () => clearTimeout(timer);
     }
@@ -29,7 +28,6 @@ export function Hero() {
 
   const handleEmailSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setNotification({
@@ -38,7 +36,6 @@ export function Hero() {
       });
       return;
     }
-    // Email valid, show details modal
     setShowDetailsModal(true);
   };
 
@@ -64,12 +61,8 @@ export function Hero() {
           type: "success",
           message: result.message,
         });
-        // Clear form and close modal
         setEmail("");
         setShowDetailsModal(false);
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
       } else {
         setNotification({
           type: "error",
@@ -124,7 +117,7 @@ export function Hero() {
           >
             <div className="flex items-center space-x-3">
               <div>
-                <p className="font-medium">{notification.message}</p>
+                <p className="font-medium text-sm">{notification.message}</p>
               </div>
               <button
                 onClick={() => setNotification(null)}
@@ -166,7 +159,7 @@ interface DetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
   email: string;
-  onSubmit: (name: string, message: string) => void;
+  onSubmit: (name: string, message: string) => Promise<void>;
   isLoading: boolean;
 }
 
@@ -180,10 +173,13 @@ function DetailsModal({
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (name.trim()) {
-      onSubmit(name.trim(), message.trim());
+      await onSubmit(name.trim(), message.trim());
+      setName("");
+      setMessage("");
+      onClose();
     }
   };
 
@@ -240,6 +236,7 @@ function DetailsModal({
               <input
                 type="text"
                 value={name}
+                autoFocus={true}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Họ và tên *"
                 required
