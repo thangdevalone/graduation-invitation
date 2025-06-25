@@ -15,16 +15,16 @@ import { useState } from "react";
 export function Header() {
   const navItems = [
     {
-      name: "Features",
-      link: "#features",
+      name: "Hành trình",
+      link: "#timeline",
     },
     {
-      name: "Pricing",
-      link: "#pricing",
+      name: "Ảnh tốt nghiệp",
+      link: "#graduation",
     },
     {
-      name: "Contact",
-      link: "#contact",
+      name: "Liên hệ qua facebook",
+      link: "https://www.facebook.com/Thag.dev/",
     },
   ];
 
@@ -36,7 +36,7 @@ export function Header() {
         <Image src="/assets/logo.svg" alt="logo" width={120} height={100} />
         <NavItems items={navItems} />
         <div className="flex items-center gap-4">
-          <NavbarButton variant="primary">Tôi tham dự</NavbarButton>
+          <NavbarButton variant="primary">DS. Người tham dự</NavbarButton>
         </div>
       </NavBody>
 
@@ -63,12 +63,12 @@ export function Header() {
             </a>
           ))}
           <div className="flex w-full flex-col gap-4">
-             <NavbarButton
+            <NavbarButton
               onClick={() => setIsMobileMenuOpen(false)}
               variant="primary"
               className="w-full"
             >
-              Tôi tham dự
+              DS. Người tham dự
             </NavbarButton>
           </div>
         </MobileNavMenu>
