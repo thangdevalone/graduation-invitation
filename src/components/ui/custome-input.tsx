@@ -9,12 +9,15 @@ export function CustomeInput({
   placeholder,
   onChange,
   onSubmit,
+  value: externalValue,
 }: {
   placeholder: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  value?: string;
 }) {
-  const [value, setValue] = useState("");
+  const [internalValue, setInternalValue] = useState("");
+  const value = externalValue !== undefined ? externalValue : internalValue;
 
   return (
     <form
@@ -33,11 +36,15 @@ export function CustomeInput({
       />
       <input
         onChange={(e) => {
-          setValue(e.target.value);
-          onChange && onChange(e);
+          if (externalValue !== undefined) {
+            onChange && onChange(e);
+          } else {
+            setInternalValue(e.target.value);
+            onChange && onChange(e);
+          }
         }}
         value={value}
-        type="text"
+        type="email"
         className={cn(
           "w-full relative text-sm sm:text-base z-50 border-none bg-white dark:text-white text-black h-full rounded-full focus:outline-none focus:ring-0 pl-4 sm:pl-13 pr-20"
         )}
@@ -47,7 +54,7 @@ export function CustomeInput({
       <button
         disabled={!value}
         type="submit"
-        className="absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-8 rounded-full disabled:bg-gray-100 bg-black dark:bg-zinc-900 dark:disabled:bg-zinc-800 transition duration-200 flex items-center justify-center"
+        className="absolute cursor-pointer right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-8 rounded-full disabled:bg-gray-100 bg-black dark:bg-zinc-900 dark:disabled:bg-zinc-800 transition duration-200 flex items-center justify-center"
       >
         <motion.svg
           xmlns="http://www.w3.org/2000/svg"
